@@ -1,5 +1,4 @@
-
-<!DOCTYPE html><html lang="en"><head>
+<!DOCTYPE html><html><head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HTML preview</title>
@@ -38,6 +37,11 @@
             background: rgba(255, 255, 255, 0.1);
             color: #e0e0e0;
             font-size: 16px;
+        }
+        .search-bar:focus {
+            outline: none;
+            border-color: #ff007a;
+            background: rgba(255, 255, 255, 0.15);
         }
         .export-btn {
             background: #ff007a;
@@ -124,15 +128,20 @@
             padding: 10px;
             border-radius: 50%;
         }
+        .no-results {
+            text-align: center;
+            padding: 20px;
+            color: #888;
+            font-size: 1.2em;
+        }
     </style>
 </head>
 <body>
     <div class="header">
         <h1>CineSphere</h1>
-        <input type="text" class="search-bar" id="searchInput" placeholder="Search Movies..." onkeyup="searchMovies()">
+        <input type="text" class="search-bar" id="searchInput" placeholder="Search Movies...">
         <button class="export-btn" onclick="exportHtml()">Export Library</button>
     </div>
-    
     <div class="content">
         <div class="add-movie-form">
             <h3>Add Movie</h3>
@@ -142,168 +151,115 @@
             <input type="text" id="category" placeholder="Category">
             <button onclick="addMovie()">Add to Library</button>
         </div>
-        <div id="movieContainer"><div class="category-section"><div class="category-title">Comedy</div><div class="movie-grid"><div class="movie-card"><img src="https://m.media-amazon.com/images/I/71h5hqRz-0L.jpg" alt="Shrek"><div class="movie-title">Shrek</div></div></div></div></div>
+        <div id="movieContainer"><div class="category-section"><div class="category-title">Animation</div><div class="movie-grid"><div class="movie-card"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR0Kl5x8gWkV17-mGuPCD2gu9BvffoqjVVeIA&amp;s" alt="Shrek"><div class="movie-title">Shrek</div></div><div class="movie-card"><img src="https://i.ebayimg.com/00/s/MTYwMFgxMDY2/z/IsUAAOSw3L9fx0kv/$_57.JPG?set_id=8800005007" alt="Toy Story"><div class="movie-title">Toy Story</div></div></div></div><div class="category-section"><div class="category-title">Latest</div><div class="movie-grid"><div class="movie-card"><img src="https://m.media-amazon.com/images/M/MV5BOTQ5Y2QyYTktYmFmZi00NWJlLWE0MzgtYTA4M2I0ZjQwZjcxXkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg" alt="The Gorge"><div class="movie-title">The Gorge</div></div><div class="movie-card"><img src="https://m.media-amazon.com/images/M/MV5BM2U0MWRjZTMtMDVhNC00MzY4LTgwOTktZGQ2MDdiYTI4OWMxXkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg" alt="The Brutalist"><div class="movie-title">The Brutalist</div></div><div class="movie-card"><img src="https://m.media-amazon.com/images/M/MV5BNzZhMTc5MWUtOTE2MS00MjUwLTljYWEtYTk1ZmVjNzhmMzYzXkEyXkFqcGc@._V1_.jpg" alt="The Monkey"><div class="movie-title">The Monkey</div></div></div></div><div class="category-section"><div class="category-title">Top Rated</div><div class="movie-grid"><div class="movie-card"><img src="https://m.media-amazon.com/images/I/911USrdQtPL.jpg" alt="The Shawshank Redemption"><div class="movie-title">The Shawshank Redemption</div></div></div></div></div>
     </div>
-    
     <div class="player-overlay" id="playerOverlay" style="display: none;">
         <button class="close-btn" onclick="closePlayer()">×</button>
         <iframe id="videoPlayer" allowfullscreen="" src=""></iframe>
     </div>
-    
+
     
 
 <script>
-                let movies = [{"title":"Shrek","imdbId":"tt0126029","posterUrl":"https://m.media-amazon.com/images/I/71h5hqRz-0L.jpg","videoUrl":"https://vidsrc.xyz/embed/movie/tt0126029","category":"Comedy"}];
+                let movies = [{"title":"Shrek","imdbId":"tt0126029","posterUrl":"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR0Kl5x8gWkV17-mGuPCD2gu9BvffoqjVVeIA&s","videoUrl":"https://vidsrc.xyz/embed/movie/tt0126029","category":"Animation"},{"title":"The Gorge","imdbId":"tt13654226","posterUrl":"https://m.media-amazon.com/images/M/MV5BOTQ5Y2QyYTktYmFmZi00NWJlLWE0MzgtYTA4M2I0ZjQwZjcxXkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg","videoUrl":"https://vidsrc.xyz/embed/movie/tt13654226","category":"Latest"},{"title":"The Shawshank Redemption","imdbId":"tt0111161","posterUrl":"https://m.media-amazon.com/images/I/911USrdQtPL.jpg","videoUrl":"https://vidsrc.xyz/embed/movie/tt0111161","category":"Top Rated"},{"title":"Toy Story","imdbId":"tt0114709","posterUrl":"https://i.ebayimg.com/00/s/MTYwMFgxMDY2/z/IsUAAOSw3L9fx0kv/$_57.JPG?set_id=8800005007","videoUrl":"https://vidsrc.xyz/embed/movie/tt0114709","category":"Animation"},{"title":"The Brutalist","imdbId":"tt8999762","posterUrl":"https://m.media-amazon.com/images/M/MV5BM2U0MWRjZTMtMDVhNC00MzY4LTgwOTktZGQ2MDdiYTI4OWMxXkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg","videoUrl":"https://vidsrc.xyz/embed/movie/tt8999762","category":"Latest"},{"title":"The Monkey","imdbId":"https://m.media-amazon.com/images/M/MV5BNzZhMTc5MWUtOTE2MS00MjUwLTljYWEtYTk1ZmVjNzhmMzYzXkEyXkFqcGc@._V1_.jpg","posterUrl":"https://m.media-amazon.com/images/M/MV5BNzZhMTc5MWUtOTE2MS00MjUwLTljYWEtYTk1ZmVjNzhmMzYzXkEyXkFqcGc@._V1_.jpg","videoUrl":"https://vidsrc.xyz/embed/movie/https://m.media-amazon.com/images/M/MV5BNzZhMTc5MWUtOTE2MS00MjUwLTljYWEtYTk1ZmVjNzhmMzYzXkEyXkFqcGc@._V1_.jpg","category":"Latest"}];
                 
                 function addMovie() {
-                    const title = document.getElementById('movieTitle').value;
-                    const imdbId = document.getElementById('imdbId').value;
-                    const posterUrl = document.getElementById('posterUrl').value;
-                    const category = document.getElementById('category').value || 'Uncategorized';
-                    const videoUrl = `https://vidsrc.xyz/embed/movie/${imdbId}`;
-                    
-                    if (title && imdbId && posterUrl) {
-                        const movie = { title, imdbId, posterUrl, videoUrl, category };
-                        movies.push(movie);
-                        displayMovies();
-                        document.getElementById('movieTitle').value = '';
-                        document.getElementById('imdbId').value = '';
-                        document.getElementById('posterUrl').value = '';
-                        document.getElementById('category').value = '';
-                    }
-                }
-                
-                function displayMovies() {
-                    const container = document.getElementById('movieContainer');
-                    container.innerHTML = '';
-                    const categories = {};
-                    movies.forEach(movie => {
-                        if (!categories[movie.category]) {
-                            categories[movie.category] = [];
-                        }
-                        categories[movie.category].push(movie);
-                    });
-                    Object.keys(categories).forEach(category => {
-                        const section = document.createElement('div');
-                        section.className = 'category-section';
-                        section.innerHTML = `<div class="category-title">${category}</div>`;
-                        const grid = document.createElement('div');
-                        grid.className = 'movie-grid';
-                        categories[category].forEach(movie => {
-                            const movieCard = document.createElement('div');
-                            movieCard.className = 'movie-card';
-                            movieCard.innerHTML = `<img src="${movie.posterUrl}" alt="${movie.title}"><div class="movie-title">${movie.title}</div>`;
-                            movieCard.onclick = () => openPlayer(movie.videoUrl);
-                            grid.appendChild(movieCard);
-                        });
-                        section.appendChild(grid);
-                        container.appendChild(section);
-                    });
-                }
+            const title = document.getElementById('movieTitle').value;
+            const imdbId = document.getElementById('imdbId').value;
+            const posterUrl = document.getElementById('posterUrl').value;
+            const category = document.getElementById('category').value || 'Uncategorized';
+            const videoUrl = `https://vidsrc.xyz/embed/movie/${imdbId}`;
 
+            if (title && imdbId && posterUrl) {
+                const movie = { title, imdbId, posterUrl, videoUrl, category };
+                movies.push(movie);
+                displayMovies();
+                document.getElementById('movieTitle').value = '';
+                document.getElementById('imdbId').value = '';
+                document.getElementById('posterUrl').value = '';
+                document.getElementById('category').value = '';
+            }
+        }
+                function displayMovies(searchTerm = '') {
+            const container = document.getElementById('movieContainer');
+            container.innerHTML = '';
+            const categories = {};
+            
+            // Filter movies based on search term
+            const filteredMovies = searchTerm 
+                ? movies.filter(movie => 
+                    movie.title.toLowerCase().includes(searchTerm.toLowerCase()))
+                : movies;
+
+            if (filteredMovies.length === 0 && searchTerm) {
+                container.innerHTML = '<div class="no-results">No movies found</div>';
+                return;
+            }
+
+            filteredMovies.forEach(movie => {
+                if (!categories[movie.category]) {
+                    categories[movie.category] = [];
+                }
+                categories[movie.category].push(movie);
+            });
+
+            Object.keys(categories).forEach(category => {
+                const section = document.createElement('div');
+                section.className = 'category-section';
+                section.innerHTML = `<div class="category-title">${category}</div>`;
+                const grid = document.createElement('div');
+                grid.className = 'movie-grid';
+                categories[category].forEach(movie => {
+                    const movieCard = document.createElement('div');
+                    movieCard.className = 'movie-card';
+                    movieCard.innerHTML = `<img src="${movie.posterUrl}" alt="${movie.title}"><div class="movie-title">${movie.title}</div>`;
+                    movieCard.onclick = () => openPlayer(movie.videoUrl);
+                    grid.appendChild(movieCard);
+                });
+                section.appendChild(grid);
+                container.appendChild(section);
+            });
+        }
                 function openPlayer(url) {
-                    const player = document.getElementById('videoPlayer');
-                    player.src = url;
-                    document.getElementById('playerOverlay').style.display = 'flex';
-                }
-
+            const player = document.getElementById('videoPlayer');
+            player.src = url;
+            document.getElementById('playerOverlay').style.display = 'flex';
+        }
                 function closePlayer() {
-                    const player = document.getElementById('videoPlayer');
-                    player.src = '';
-                    document.getElementById('playerOverlay').style.display = 'none';
-                }
-
+            const player = document.getElementById('videoPlayer');
+            player.src = '';
+            document.getElementById('playerOverlay').style.display = 'none';
+        }
                 function exportHtml() {
-                    function exportHtml() {
-            // Clone the current document
-            const docClone = document.cloneNode(true);
+            const docClone = document.implementation.createHTMLDocument('CineSphere');
+            docClone.documentElement.innerHTML = document.documentElement.innerHTML;
             
-            // Remove the player overlay content from export
             const overlay = docClone.getElementById('playerOverlay');
-            overlay.style.display = 'none';
-            overlay.querySelector('iframe').src = '';
-            
-            // Add script with current movies data
+            if (overlay) {
+                overlay.style.display = 'none';
+                overlay.querySelector('iframe').src = '';
+            }
+
             const script = docClone.createElement('script');
             script.textContent = `
                 let movies = ${JSON.stringify(movies)};
                 
-                function addMovie() {
-                    const title = document.getElementById('movieTitle').value;
-                    const imdbId = document.getElementById('imdbId').value;
-                    const posterUrl = document.getElementById('posterUrl').value;
-                    const category = document.getElementById('category').value || 'Uncategorized';
-                    const videoUrl = \`https://vidsrc.xyz/embed/movie/\${imdbId}\`;
-                    
-                    if (title && imdbId && posterUrl) {
-                        const movie = { title, imdbId, posterUrl, videoUrl, category };
-                        movies.push(movie);
-                        displayMovies();
-                        document.getElementById('movieTitle').value = '';
-                        document.getElementById('imdbId').value = '';
-                        document.getElementById('posterUrl').value = '';
-                        document.getElementById('category').value = '';
-                    }
-                }
+                ${addMovie.toString()}
+                ${displayMovies.toString()}
+                ${openPlayer.toString()}
+                ${closePlayer.toString()}
+                ${exportHtml.toString()}
+                ${searchMovies.toString()}
                 
-                function displayMovies() {
-                    const container = document.getElementById('movieContainer');
-                    container.innerHTML = '';
-                    const categories = {};
-                    movies.forEach(movie => {
-                        if (!categories[movie.category]) {
-                            categories[movie.category] = [];
-                        }
-                        categories[movie.category].push(movie);
-                    });
-                    Object.keys(categories).forEach(category => {
-                        const section = document.createElement('div');
-                        section.className = 'category-section';
-                        section.innerHTML = \`<div class="category-title">\${category}</div>\`;
-                        const grid = document.createElement('div');
-                        grid.className = 'movie-grid';
-                        categories[category].forEach(movie => {
-                            const movieCard = document.createElement('div');
-                            movieCard.className = 'movie-card';
-                            movieCard.innerHTML = \`<img src="\${movie.posterUrl}" alt="\${movie.title}"><div class="movie-title">\${movie.title}</div>\`;
-                            movieCard.onclick = () => openPlayer(movie.videoUrl);
-                            grid.appendChild(movieCard);
-                        });
-                        section.appendChild(grid);
-                        container.appendChild(section);
-                    });
-                }
-
-                function openPlayer(url) {
-                    const player = document.getElementById('videoPlayer');
-                    player.src = url;
-                    document.getElementById('playerOverlay').style.display = 'flex';
-                }
-
-                function closePlayer() {
-                    const player = document.getElementById('videoPlayer');
-                    player.src = '';
-                    document.getElementById('playerOverlay').style.display = 'none';
-                }
-
-                function exportHtml() {
-                    ${exportHtml.toString()}
-                }
-
-                function searchMovies() {
-                    console.log('Search not implemented yet');
-                }
-
-                // Initialize display
                 displayMovies();
+                
+                document.getElementById('searchInput').addEventListener('input', searchMovies);
             `;
-            
-            // Remove existing script and add new one
+
             const oldScript = docClone.querySelector('script');
-            oldScript.parentNode.removeChild(oldScript);
+            if (oldScript) oldScript.remove();
             docClone.body.appendChild(script);
 
-            // Convert to HTML string and download
             const htmlContent = '<!DOCTYPE html>' + docClone.documentElement.outerHTML;
             const blob = new Blob([htmlContent], { type: 'text/html' });
             const url = window.URL.createObjectURL(blob);
@@ -315,12 +271,12 @@
             document.body.removeChild(a);
             window.URL.revokeObjectURL(url);
         }
-                }
-
                 function searchMovies() {
-                    console.log('Search not implemented yet');
-                }
-
-                // Initialize display
+            const searchTerm = document.getElementById('searchInput').value;
+            displayMovies(searchTerm);
+        }
+                
                 displayMovies();
+                
+                document.getElementById('searchInput').addEventListener('input', searchMovies);
             </script></body></html>
